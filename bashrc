@@ -9,7 +9,7 @@ fi
 # {{{ Keychain
 if [[ -z "${SSH_AGENT_PID}" ]] && type keychain &>/dev/null
 then
-    eval $(keychain --quiet --eval id_dsa | sed -e 's,;,\n,g')
+    eval $(keychain --quiet --eval id_rsa | sed -e 's,;,\n,g')
 fi
 # }}}
 

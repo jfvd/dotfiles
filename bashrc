@@ -1,16 +1,23 @@
 # ~/.bashrc
 
-# Interactive?
+# {{{ Interactive?
 if [[ $- != *i* ]]; then
 	return
 fi
+# }}}
 
-# Run keychain
-keychain id_rsa
-[[ -z ${HOSTNAME} ]] && HOSTNAME=$(uname -n)
-[[ -f ${HOME}/.keychain/${HOSTNAME}-sh ]] && \
-	. "${HOME}/.keychain/${HOSTNAME}-sh"
-[[ -f ${HOME}/.keychain/${HOSTNAME}-sh-gpg ]] && \
-	. "${HOME}/.keychain/${HOSTNAME}-sh-gpg"
+# {{{ Keychain
+if [[ -z "${SSH_AGENT_PID}" ]] && type keychain &>/dev/null
+then
+    eval $(keychain --quiet --eval id_dsa | sed -e 's,;,\n,g')
+fi
+# }}}
+
+# {{{ PATH
+if [[ -n "${PATH/*$HOME\/bin:*/}" ]]
+then
+    export PATH="$HOME/bin:$PATH"
+fi
+# }}}
 
 # vim: ts=8 sw=8 noet fdm=marker tw=80 :
